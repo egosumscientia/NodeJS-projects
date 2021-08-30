@@ -2,13 +2,40 @@
 
 //Dependencies
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const {StringDecoder} = require('string_decoder');
+let config = require('./config');
+let fs = require('fs'); //NodeJS's file system
 
-//The server should respond to all requests with a string
-const server = http.createServer(function(req,res){
-    
 
+//Instantiate the HTTP server
+let httpServer = http.createServer(function(req,res){
+    unifiedServer(req, res);
+});
+
+//Start the HTTP server
+httpServer.listen(config.httpPort,function(){
+    console.log("The server is listening on port " + config.httpPort  + " in " + config.envName + " mode");
+});
+
+//Instantiate HTTPS server
+let httpsServerOptions = {
+    'key' : fs.readFileSync('./https/key.pem'),
+    'cert' : fs.readFileSync('./https/cert.pem')
+};
+
+let httpsServer = https.createServer(httpsServerOptions, function(req,res){
+    unifiedServer(req,res);
+});
+
+//Start the HTTPS server
+httpsServer.listen(config.httpsPort,function(){
+    console.log("The server is listening on port " + config.httpsPort  + " in " + config.envName + " mode");
+});
+
+//All the server logic for both http and https server
+let unifiedServer = function(req, res){
     //Get te URL and parse it
     const parsedUrl = url.parse(req.url, true);
 
@@ -36,53 +63,48 @@ const server = http.createServer(function(req,res){
     req.on('end', function(){
         buffer += decoder.end();
 
-        //Choose the handler this request should go to. if not found, use the 'not found' handler provided
-        let chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
+    //Choose the handler this request should go to. if not found, use the 'not found' handler provided
+    let chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
 
-        //Construct the data object (JSON) to send it to the handler
-        let data = {
-            'TrimmedPath' : trimmedPath,
-            'queryStringObject' : queryStringObject,
-            'method' : method,
-            'headers' : headers,
-            'payload' : buffer 
-        };
+    //Construct the data object (JSON) to send it to the handler
+    let data = {
+        'TrimmedPath' : trimmedPath,
+        'queryStringObject' : queryStringObject,
+        'method' : method,
+        'headers' : headers,
+        'payload' : buffer 
+    };
 
-        //Route the request to the handler specified in the handler
-        chosenHandler(data, function(statusCode, payload){
-            //Use the satus code called back by the handler or default (200)
-            statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+    //Route the request to the handler specified in the handler
+    chosenHandler(data, function(statusCode, payload){
+        //Use the satus code called back by the handler or default (200)
+        statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
 
-            //Use the payload called back by the handler or default to an empty object
-            payload = typeof(payload) == 'object' ? payload : {};
+        //Use the payload called back by the handler or default to an empty object
+        payload = typeof(payload) == 'object' ? payload : {};
 
-            //Convert the payload to a string. This is the payload the handler is sending back to the user
-            let payloadString = JSON.stringify(payload);
+        //Convert the payload to a string. This is the payload the handler is sending back to the user
+        let payloadString = JSON.stringify(payload);
 
-            //Return the response
-            res.setHeader('Content-Type','application/json'); //We are sending JSON. This lets know every one out there wI am sending JSON format.
-            res.writeHead(statusCode);
-            res.end(payloadString);
+        //Return the response
+        res.setHeader('Content-Type','application/json'); //We are sending JSON. This lets know every one out there wI am sending JSON format.
+        res.writeHead(statusCode);
+        res.end(payloadString);
 
-            //Log the request path
-            /* console.log('Request is received on this path: '+ trimmedPath + ' with this method: ' + method + ' and with these query string parameters: ', queryStringObject); */
-            /* console.log('Request received with these headers: ', headers) */
-            //console.log('Request received with this payload: ', buffer)
+        //Log the request path
+        /* console.log('Request is received on this path: '+ trimmedPath + ' with this method: ' + method + ' and with these query string parameters: ', queryStringObject); */
+        /* console.log('Request received with these headers: ', headers) */
+        //console.log('Request received with this payload: ', buffer)
 
-            console.log('Returning this response: ', statusCode, payloadString);
+        console.log('Returning this response: ', statusCode, payloadString);
 
         });
 
     });
+};
 
-});
 
-
-//Start the server, and have it listening on port 3000
-server.listen(3000,function(){
-    console.log("The server is listening on port 3000...");
-});
-
+//Define the handlers
 let handlers = {};
 
 //'Sample' handler. Handlers send an object back to the user.
