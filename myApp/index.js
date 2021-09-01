@@ -7,6 +7,21 @@ const url = require('url');
 const {StringDecoder} = require('string_decoder');
 let config = require('./config');
 let fs = require('fs'); //NodeJS's file system
+/* let _data = require('./lib/data'); */
+
+//TESTING
+//@TODO delete this
+/* _data.create('test','newFile',{'foo':'bar'},function(err){
+    console.log('this was the error: ',err);
+});
+
+_data.update('test','newFile',{'PauloEnrique':'GANADOR'},function(err){
+    console.log('this was the error: ',err);
+});
+
+_data.delete('test','newFile',function(err){
+    console.log('this was the error: ',err);
+}); */
 
 
 //Instantiate the HTTP server
@@ -107,10 +122,9 @@ let unifiedServer = function(req, res){
 //Define the handlers
 let handlers = {};
 
-//'Sample' handler. Handlers send an object back to the user.
-handlers.sample = function(data, callback){
-    //Callback a http status code and a payload (object)
-    callback(406, {'name' : 'I am a sample handler'})
+//Ping handler
+handlers.ping = function(data,callback){
+    callback(200);
 };
 
 //Not found a handler
@@ -121,6 +135,6 @@ handlers.notFound = function(data, callback){
 //Define a request router
 let router = {
 
-    'sample' : handlers.sample
+    'ping' : handlers.ping
 
 }
