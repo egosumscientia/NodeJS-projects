@@ -1,12 +1,15 @@
 /* This is the primary file for the API */
 
 //Dependencies
-const http = require('http');
-const https = require('https');
-const url = require('url');
-const {StringDecoder} = require('string_decoder');
-let config = require('./config');
-let fs = require('fs'); //NodeJS's file system
+let http = require('http');
+let https = require('https');
+let url = require('url');
+let StringDecoder = require('string_decoder').StringDecoder;
+//const {StringDecoder} = require('string_decoder');
+let config = require('./lib/config');
+let fs = require('fs');
+let handlers = require('./lib/handlers');
+let helpers = require('./lib/helpers');
 /* let _data = require('./lib/data'); */
 
 //TESTING
@@ -83,11 +86,11 @@ let unifiedServer = function(req, res){
 
     //Construct the data object (JSON) to send it to the handler
     let data = {
-        'TrimmedPath' : trimmedPath,
+        'trimmedPath' : trimmedPath,
         'queryStringObject' : queryStringObject,
         'method' : method,
         'headers' : headers,
-        'payload' : buffer 
+        'payload' : helpers.parseJsonToObject(buffer) 
     };
 
     //Route the request to the handler specified in the handler
@@ -119,22 +122,10 @@ let unifiedServer = function(req, res){
 };
 
 
-//Define the handlers
-let handlers = {};
-
-//Ping handler
-handlers.ping = function(data,callback){
-    callback(200);
-};
-
-//Not found a handler
-handlers.notFound = function(data, callback){
-    callback(404)
-};
-
 //Define a request router
 let router = {
 
-    'ping' : handlers.ping
+    'ping' : handlers.ping,
+    'users': handlers.users
 
 }
