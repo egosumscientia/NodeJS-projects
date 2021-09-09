@@ -6,7 +6,7 @@ const app = express()
 const port = 3000
 
 // middlewards
-app.use(express.json())
+app.use(express.json())  // Enviar/recibir objetos JSON a/desde la API.
 app.use(companyRoutes);
 app.use(userRoutes);
 
