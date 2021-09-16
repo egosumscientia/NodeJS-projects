@@ -1,11 +1,18 @@
-const login = (userData) => {
+import User from '../models/UserModel.js'
+
+const login = async (userData) => {
     
-    if(userData.email){
-        return {
-            name: "juan",
-            password: "123456",
-            role: "admin"
+    const {email, password} = userData
+
+    if(email){
+        const userData = await User.findOne({email:email,password:password});
+        delete userData.password;
+        const user = {
+            email: userData.email,
+            role: userData.role,
+            shop: userData.shop
         }
+        return user;
     }
     else{
         return {
