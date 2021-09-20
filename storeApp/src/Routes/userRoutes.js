@@ -2,9 +2,16 @@ import express from 'express';
 import userController from '../Controllers/userController.js';
 const userRoutes = express.Router();
 
+//Home
+userRoutes.get('/', async(req,res)=>{
+    /* res.status("202"); */
+    const data = "HELLO WORLD";
+    res.json(data);
+});
+
 //LOGIN
-userRoutes.post('/login', async(req,res)=>{
-    let data = await userController.login(req.body);
+userRoutes.get('/login', async(req,res)=>{
+    let data = await userController.login(req.query);
     res.json(data);
 });
 
@@ -33,7 +40,7 @@ userRoutes.get('/listUsers',async(req,res)=>{
 });
 
 userRoutes.delete('/deleteUser',async(req,res)=>{
-    let deleteUser = await userController.deleteuser(req.query);
+    let deleteUser = await userController.deleteuser(req.body);
     res.json(deleteUser);
 });
 

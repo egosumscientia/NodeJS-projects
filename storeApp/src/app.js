@@ -13,7 +13,7 @@ app.use(cors({origin:true}));
 //routes
 app.use(userRoutes);
 app.use(productRoutes);
-app.use(companyRoutes);
+
 
 app.listen(port,async()=>{
     try{
@@ -21,9 +21,7 @@ app.listen(port,async()=>{
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        db.connection.on('open',()=>{
-            console.log("The DB is connected to: ", uri);
-        });
+        console.log(mongoose.connection.readyState === 1 ? "Connected to DB" : "Not connected");
     }catch{
         console.log("Error de conexión a la BD");
     }
