@@ -2,6 +2,12 @@ import express from 'express';
 import userController from '../Controllers/userController.js';
 const userRoutes = express.Router();
 
+//LOGIN
+userRoutes.post('/login', async(req,res)=>{
+    let data = await userController.login(req.body);
+    res.json(data);
+});
+
 
 //Customer's routes
 userRoutes.post('/addme',async(req,res)=>{
