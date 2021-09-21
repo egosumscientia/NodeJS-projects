@@ -45,38 +45,34 @@ userRoutes.post('/editmydata',async(req,res)=>{
 });
 
 
-//Admin's functions
-userRoutes.get('/findusers', async(req,res)=>{
+//Admin's functions on users.
+userRoutes.route('/finduser').get(async(req,res)=>{
     res.json('GET request to the findusers page');
-});
-userRoutes.post('/findusers', async(req,res)=>{
-    let findUsers = await userController.findusers(req.query);
+}).post(async(req,res)=>{
+    let findUsers = await userController.finduser(req.body);
     res.json(findUsers);
 });
 
-userRoutes.get('/deleteuser', async(req,res)=>{
+userRoutes.route('/deleteuser').get(async(req,res)=>{
     res.json('GET request to the deleteuser page');
-});
-userRoutes.delete('/deleteuser', async(req,res)=>{
+}).post(async(req,res)=>{
     let deleteUser = await userController.deleteuser(req.body);
     res.json(deleteUser);
-});
+})
 
-userRoutes.get('/adduser', async(req,res)=>{
-    res.json('GET request to the adduser page');
-});
-userRoutes.post('/adduser', async(req,res)=>{
+userRoutes.route('/adduser').get(async(req, res)=>{
+    res.send("GET request to the adduser page");
+}).post(async(req,res)=>{
     let addUser = await userController.adduser(req.body);
     res.json(addUser);
 });
 
-userRoutes.get('/edituser', async(req,res)=>{
+userRoutes.route('/edituser').get(async(req,res)=>{
     res.json('GET request to the edituser page');
-});
-userRoutes.post('/edituser', async(req,res)=>{
+}).post(async(req,res)=>{
     let editUser = await userController.edituser(req.body);
     res.json(editUser);
-});
+})
 
 
 export default userRoutes;
