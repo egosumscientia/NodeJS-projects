@@ -74,7 +74,7 @@ const editmydata = async(userData)=>{
 };
 
 //Admin's functions on users.
-const finduser = async(userData)=>{
+const findusers = async(userData)=>{
 
     const {email} = userData;
 
@@ -105,11 +105,6 @@ const deleteuser = async(userData)=>{
 const adduser = async(userData)=>{
 
     const {name, email, password, role, store} = userData;
-    console.log(name);
-    console.log(email);
-    console.log(password);
-    console.log(role);
-    console.log(store);
 
     if(email){
         const newUser = new User({
@@ -157,7 +152,7 @@ const userController = {
     addme,
     deletemyaccount,
     editmydata,
-    finduser,
+    findusers,
     deleteuser,
     adduser,
     edituser

@@ -9,47 +9,71 @@ userRoutes.get('/', async(req,res)=>{
     res.json(data);
 });
 
+
 //LOGIN
-userRoutes.get('/login', async(req,res)=>{
-    let data = await userController.login(req.query);
+userRoutes.get('/login', (req,res) => {
+    res.json('GET request to the login page');
+});
+userRoutes.post('/login', async(req,res)=>{
+    let data = await userController.login(req.body);
     res.json(data);
 });
 
-
 //Customer's routes
+userRoutes.get('/addme',async(req,res)=>{
+    res.json('GET request to the addme page');
+});
 userRoutes.post('/addme',async(req,res)=>{
     let addMe = await userController.addme(req.body);
     res.json(addMe);
 });
 
-userRoutes.post('/deleteMyAccount',async(req,res)=>{
+userRoutes.get('/deletemyaccount',async(req,res)=>{
+    res.json('GET request to the deletemyaccount page');
+});
+userRoutes.delete('/deletemyaccount',async(req,res)=>{
     let deleteMe = await userController.deletemyaccount(req.body);
     res.json(deleteMe)
 });
 
-userRoutes.post('/editMyData',async(req,res)=>{
+userRoutes.get('/editmydata',async(req,res)=>{
+    res.json('GET request to the editmydata page');
+});
+userRoutes.post('/editmydata',async(req,res)=>{
     let editMyData = await userController.editmydata(req.body);
     res.json(editMyData);
 });
 
 
 //Admin's functions
-userRoutes.get('/listUsers',async(req,res)=>{
-    let listUsers = await userController.listusers(req.query);
-    res.json(listUsers);
+userRoutes.get('/findusers', async(req,res)=>{
+    res.json('GET request to the findusers page');
+});
+userRoutes.post('/findusers', async(req,res)=>{
+    let findUsers = await userController.findusers(req.query);
+    res.json(findUsers);
 });
 
-userRoutes.delete('/deleteUser',async(req,res)=>{
+userRoutes.get('/deleteuser', async(req,res)=>{
+    res.json('GET request to the deleteuser page');
+});
+userRoutes.delete('/deleteuser', async(req,res)=>{
     let deleteUser = await userController.deleteuser(req.body);
     res.json(deleteUser);
 });
 
-userRoutes.post('/adduser',async(req,res)=>{
+userRoutes.get('/adduser', async(req,res)=>{
+    res.json('GET request to the adduser page');
+});
+userRoutes.post('/adduser', async(req,res)=>{
     let addUser = await userController.adduser(req.body);
     res.json(addUser);
 });
 
-userRoutes.post('/edituser',async(req,res)=>{
+userRoutes.get('/edituser', async(req,res)=>{
+    res.json('GET request to the edituser page');
+});
+userRoutes.post('/edituser', async(req,res)=>{
     let editUser = await userController.edituser(req.body);
     res.json(editUser);
 });

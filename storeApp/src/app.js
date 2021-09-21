@@ -14,7 +14,6 @@ app.use(cors({origin:true}));
 app.use(userRoutes);
 app.use(productRoutes);
 
-
 app.listen(port,async()=>{
     try{
         await db.connect(uri,{
