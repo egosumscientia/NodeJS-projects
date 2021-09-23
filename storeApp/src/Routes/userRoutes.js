@@ -9,7 +9,6 @@ userRoutes.get('/', async(req,res)=>{
     res.json(data);
 });
 
-
 //LOGIN
 userRoutes.get('/login', (req,res) => {
     res.json('GET request to the login page');
