@@ -1,70 +1,89 @@
 import Product from "../Models/productModel.js";
 
-const findproduct = async(userData)=>{
-    const {name, description} = userData;
+const findproduct = async(productData)=>{
 
-    if(name && description){
-        let findProduct = await Product.find({name:name, description:description});
-        console.log(findProduct);
-        return(findProduct);
-    };
+    const {name} = productData;
+
+    try{
+        if(name !== ""){
+            let findProduct = await Product.find({name:name});
+            
+            if(findProduct.length>0){
+                return(findProduct);
+            }else{
+                return {message: "The product does not exist"};
+            }
+            
+        }else{
+            return {message: "At least the product name is required"};
+        }
+    }catch(e){
+        return {error: console.error(e)};
+    }
 
 };
 
-const addproduct = async(userData)=>{
-    const {name, description, picture, priceperunit, qtyavailable, store} = userData;
+const addproduct = async(productData)=>{
+    
+    const {name, description, picture, priceperunit, qtyavailable, store} = productData;
 
-    if(name&description&picture&priceperunit&qtyavailable&store){
-        const newProduct = new Product({
-            name: name,
-            description: description,
-            picture:picture,
-            priceperunit:priceperunit,
-            qtyavailable:qtyavailable,
-            store:store
-        });
+    try{
+        if(name !== "" & description !== "" & picture !== "" & priceperunit !== 0 & qtyavailable !== 0 & store !== ""){
+            const newProduct = new Product({
+                name: name,
+                description: description,
+                picture:picture,
+                priceperunit:priceperunit,
+                qtyavailable:qtyavailable,
+                store:store
+            });
+    
+            const aNewProduct = await newProduct.save();
+            console.log(aNewProduct);
+            return(aNewProduct);
+    
+        }else{
+            return {message:"There was en error adding the product"};
+        };
+    }catch(e){
+        return {error: console.error(e)};
+    }
 
-        const aNewProduct = await newProduct.save();
-        console.log(aNewProduct);
-        return(aNewProduct);
-
-    }else{
-        return "There was en error adding...";
-    };
 };
 
-const editproduct = async(userData)=>{
-    const {name, description, picture, priceperunit, qtyavailable, store} = userData;
+const editproduct = async(productData)=>{
+    
+    const {name, description, picture, priceperunit, qtyavailable, store} = productData;
 
-    if(name&description&picture&priceperunit&qtyavailable&store){
-        const newProduct = new Product({
-            name: name,
-            description: description,
-            picture:picture,
-            priceperunit:priceperunit,
-            qtyavailable:qtyavailable,
-            store:store
-        });
-
-        const edProduct = await newProduct.findOneAndUpdate({name:name},{description:description,picture:picture,priceperunit:priceperunit,qtyavailable:qtyavailable,store:store});
-        console.log(edProduct);
-        return(edProduct);
-
-    }else{
-        return "there was an error editing...";
+    try{
+        if(name !== "" && description !== "" && picture !== "" && priceperunit !== 0 && qtyavailable !== 0 && store !== ""){
+            const edUser = await Product.findOneAndUpdate({name:name},{description:description,picture:picture,priceperunit:priceperunit,qtyavailable:qtyavailable,store:store});
+            return(edUser);
+        }else{
+            return {message:"All the fields are required to edit the product"};
+        }     
+    }catch(e){
+        return {error: console.error(e)};
     };
+    
+    
 };
 
 
-const deleteproduct = async(userData)=>{
-    const {name} = userData;
+const deleteproduct = async(productData)=>{
+    
+    const {name} = productData;
 
-    if(name){
-        const delProd = await Product.deleteMany({name:name});
-        console.log(delProd);
-        return(delProd);
-    }else{
-        return "there was an error deleting..."
+    try{
+        if(name!==""){
+            const delProd = await Product.deleteOne({name:name});
+            console.log(delProd);
+            return(delProd);
+        }else{
+            return {message:"There was an error deleting the product"}; 
+        }
+    }catch(e){
+        return {error: console.error(e)};
     }
 
 };

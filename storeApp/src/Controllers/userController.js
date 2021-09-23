@@ -51,10 +51,10 @@ const addme = async(userData)=>{
                 console.log(aNewUser);
                 return(aNewUser);
             }else{
-                return {error: "The email address is required"};
+                return {message: "The email address is required"};
             }
         }else{
-            return {error:"The name is required"}
+            return {message:"The name is required"}
         }     
     }catch(e){
         return {error: console.error(e)};
@@ -73,7 +73,7 @@ const deletemyaccount = async(userData)=>{
             console.log(deletedAccount);
             return deletedAccount;
         }else{
-            return "The email is required";
+            return {message:"The email is required"};
         }
     }catch(e){
         return {error: console.error(e)};
@@ -91,7 +91,7 @@ const editmydata = async(userData)=>{
             const editedUser = await User.findOneAndUpdate({email:email},{name:name,password:password,role:role,store:store});
             return(editedUser);
         }else{
-            return {error:"Your email address is required / or is being used."}
+            return {message:"Your email address is required / or is being used."}
         }     
     }catch(e){
         return {error: console.error(e)};
@@ -108,7 +108,7 @@ const finduser = async(userData)=>{
             let findUser = await User.find({email:email});
             return(findUser);
         }else{
-            return {error: "The user does not exist"};
+            return {message: "The user does not exist"};
         }
     }catch(e){
         return {error: console.error(e)};
@@ -125,10 +125,10 @@ const deleteuser = async(userData)=>{
             const delUser = await User.deleteOne({email:email});
             return(delUser);
         }else{
-            return {error: "There was an error deleting the user..."};
+            return {message: "There was an error deleting the user..."};
         }
     }catch(e){
-        return console.log(e);
+        return {error: console.error(e)};
     }
 
 };
@@ -151,10 +151,10 @@ const adduser = async(userData)=>{
                 console.log(aNewUser);
                 return(aNewUser);
             }else{
-                return {error: "Your name is required"};
+                return {message: "Your name is required"};
             }
         }else{
-            return {error:"The email address is required"}
+            return {message:"The email address is required"};
         }     
     }catch(e){
         return {error: console.error(e)};
@@ -171,7 +171,7 @@ const edituser = async(userData)=>{
             const edUser = await User.findOneAndUpdate({email:email},{name:name,password:password,role:role,store:store});
             return(edUser);
         }else{
-            return {error:"Your email address is required / or is being used."}
+            return {message:"Your email address is required / or is being used."};
         }     
     }catch(e){
         return {error: "Error editing the data."};
