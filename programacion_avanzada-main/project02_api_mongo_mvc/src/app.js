@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 import companyRoutes from './routes/CompanyRoutes.js';
 import userRoutes from './routes/UserRoutes.js';
 const app = express()
-const port = 3040
+const port = 3000
 
 // middlewards
-app.use(express.json())  // Enviar/recibir objetos JSON a/desde la API.
+app.use(express.json())
 app.use(companyRoutes);
 app.use(userRoutes);
 

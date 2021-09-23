@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import Company from './models/CompanyModel.js';
 const app = express()
-const port = 3030
+const port = 3000
 
 app.get('/', async (req, res) => {
   try {

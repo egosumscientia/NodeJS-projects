@@ -2,7 +2,7 @@ import express from 'express';
 import userController from '../controllers/UserController.js'
 const userRoutes = express.Router();
 
-userRoutes.post('/login', async(req,res) =>{
+userRoutes.post('/login', async (req,res) =>{
     
     let data = await userController.login(req.body);
     res.json(data);

@@ -1,16 +1,16 @@
-import User from '../models/UserModel.js'
-
+import User from "../models/UserModel.js"
 const login = async (userData) => {
-    
-    const {email, password} = userData
-
+    const {email, password} = userData;
     if(email){
-        const userData = await User.findOne({email:email,password:password});
-        delete userData.password;
+        const userData = await User.findOne({
+            email: email, 
+            password: password
+        });
         const user = {
             email: userData.email,
             role: userData.role,
             shop: userData.shop
+
         }
         return user;
     }
