@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import userRoutes from './routes/UserRoutes.js';
 const app = express()
-const port = 3000
-app.use(express.json())
-app.use(cors({ origin: true }))
+const port = 3001;
+
+app.use(express.json());
+app.use(cors({ origin: true }));
 // routes
 app.use(userRoutes);
 
@@ -17,7 +18,7 @@ app.listen(port, async () => {
     })
   }
   catch (e) {
-    console.log("Error de conexión a la DB")
+    console.log("Error de conexión a la DB");
   }
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening at http://localhost:${port}`);
 })

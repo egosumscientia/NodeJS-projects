@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Grid, makeStyles } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import {Colors} from './shared/styles/Colors';
+
 function App() {
   const colors = Colors();
-  const {primary, btnDanger, btnPrimary} = colors;
+  const {btnDanger, btnPrimary} = colors;
 
   return (
     <div>
@@ -12,7 +13,7 @@ function App() {
           <Button variant="contained" className={btnPrimary}>Login</Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" color="primary">Login</Button>
+          <Button variant="contained" className={btnDanger}>Login</Button>
         </Grid>
       </Grid>
 
