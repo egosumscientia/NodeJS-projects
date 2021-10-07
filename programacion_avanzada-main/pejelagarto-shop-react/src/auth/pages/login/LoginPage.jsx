@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from 'react';
 import { Button, TextField, Grid, Container } from '@material-ui/core';
 import { Colors } from '../../../shared/styles/Colors';
-import ApiBaseUrl from '../../../shared/utils/Api.js'
+import ApiBaseUrl from '../../../shared/utils/Api.jsx'
 
 const LoginPage = () =>{
     
@@ -20,7 +20,7 @@ const LoginPage = () =>{
                 const response = await fetch(`${ApiBaseUrl}/login`,{
                     method:'POST',
                     body:JSON.stringify(userData),
-                    header:{
+                    headers:{
                         'Content-Type':'application/json'
                     }
                 });
