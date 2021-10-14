@@ -1,4 +1,5 @@
 import User from "../models/UserModel.js"
+
 const login = async (userData) => {
     const {email, password} = userData;
     if(email){
@@ -25,8 +26,14 @@ const register = () => {
     return { status: "registered" }
 }
 
+const getUsers = async () => {
+    const users = await User.find({});
+    return users;
+}
+
 const userController = {
     register,
-    login
+    login,
+    getUsers
 }
 export default userController;

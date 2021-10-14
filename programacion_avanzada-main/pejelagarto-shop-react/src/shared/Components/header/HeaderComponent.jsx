@@ -13,6 +13,7 @@ export const HeaderComponent = () => {
             </IconButton>
             <Link color='inherit' component={RouterLink} to='/login'>Login</Link>
             <Link color='inherit' component={RouterLink} to='/register'>Register</Link>
+            <Link color='inherit' component={RouterLink} to='/users'>Users</Link>
         </Toolbar>
         </AppBar>
     )

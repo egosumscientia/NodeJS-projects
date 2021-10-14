@@ -46,7 +46,7 @@ const LoginPage = () =>{
                     </Grid>
                 </Grid>
                 <Button variant="contained" onClick={login} className={colors.btnPrimary}>LOG IN</Button>
-            </Container>  
+            </Container>
         </Fragment>
     ) 
 }
