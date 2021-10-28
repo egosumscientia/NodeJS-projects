@@ -1,0 +1,20 @@
+Ingresar a la db de admin para ingresar usuario
+1 - show dbs
+2 -     
+db.createUser(
+    {
+        user: "admin",
+        pwd: "abcd*1234",
+        roles: [{role: "userAdminAnyDatabase", db: "admin"}, "readWriteAnyDatabase"]
+    }
+);
+
+Configurar mongo para acceder desde cualquier parte del mundo
+1 - sudo nano /etc/mongod.conf
+2 - En la sección de security agregar
+    - authorization: "enabled"
+3 - En network interfaces agregar la ip local de la instancia
+    bindIp: 127.0.0.1, 172.26.0.57
+
+// URL de conexión
+mongodb://user:password@hostIP:27017/dbName?authSource=admin

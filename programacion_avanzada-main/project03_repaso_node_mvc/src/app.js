@@ -14,7 +14,7 @@ app.use(userRoutes);
 
 app.listen(port, async () => {
   try {
-    await mongoose.connect(mongoAtlasURL,{
+    await mongoose.connect(TestDB,{
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

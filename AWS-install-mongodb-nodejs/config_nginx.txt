@@ -1,0 +1,13 @@
+install nvm
+https://github.com/nvm-sh/nvm
+
+install pm2
+https://pm2.keymetrics.io/
+
+Install nginx
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04-es
+
+config reverse proxy nginx
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-20-04-es
+
+
