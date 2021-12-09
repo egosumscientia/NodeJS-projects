@@ -41,11 +41,9 @@ lib.create = function(dir, file, data, callback){
     });
 };
 
-
 //Read data from a file
 lib.read = function(dir,file,callback){
     fs.readFile(lib.baseDir+dir+'/'+file+'.json','utf-8', function(err, data){
-        
         if(!err && data){
             let parsedData = helpers.parseJsonToObject(data);
             callback(false,parsedData);
@@ -53,8 +51,7 @@ lib.read = function(dir,file,callback){
             callback(err,data);
         }  
     });
-}
-
+};
 
 //Update the data inside a file
 lib.update = function(dir,file,data,callback){
