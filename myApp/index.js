@@ -121,10 +121,10 @@ let unifiedServer = function(req, res){
     });
 };
 
-
 //Define a request router
 let router = {
     'ping' : handlers.ping,
     'users': handlers.users,
-    'tokens': handlers.tokens
+    'tokens': handlers.tokens,
+    'checks': handlers.checks
 };
