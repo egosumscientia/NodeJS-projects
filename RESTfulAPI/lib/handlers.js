@@ -29,13 +29,6 @@ handlers._users.post = function(data, callback){
     let passw = typeof(data.payload.passw) == 'string' && data.payload.passw.trim().length > 0  ? data.payload.passw.trim() : false;
     let tosAgreement = typeof(data.payload.tosAgreement) == 'boolean' && data.payload.tosAgreement == true  ? true  : false;
 
-    console.log(firstName);
-    console.log(lastName);
-    console.log(phone);
-    console.log(passw);
-    console.log(tosAgreement);
-
-
     if(firstName && lastName && phone && passw && tosAgreement){
         //Make sure that the user does not already exists
         _data.read('users', phone, function(err,data){
