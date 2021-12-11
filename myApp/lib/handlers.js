@@ -436,7 +436,7 @@ handlers._checks.post = function(data,callback){
                                         }else{  
                                             callback(500,{'Error':'Could not update the user with the new check'});
                                         }
-                                    })
+                                    });
                                 }else{
                                     callback(500,{'Error':'Could not create the new check'})
                                 }
@@ -447,12 +447,11 @@ handlers._checks.post = function(data,callback){
                     }else{
                         callback(403);
                     }
-                })
+                });
             }else{
                 callback(403)
             }
-        })
-
+        });
     }else{
         return callback(400,{'Error':'Missing required inputs or these are invalid'})
     }
