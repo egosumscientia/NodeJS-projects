@@ -36,7 +36,7 @@ workers.gatherAllChecks = function(){
 
 //Sanity-check the check-data
 workers.validateCheckData = function(originalCheckData){
-    
+
     originalCheckData = typeof(originalCheckData) == 'object' && originalCheckData !== null ? originalCheckData : {};
     
     originalCheckData.id = typeof(originalCheckData.id) == 'string' && originalCheckData.id.trim().length == 20 ? originalCheckData.id.trim() : false;
@@ -51,21 +51,13 @@ workers.validateCheckData = function(originalCheckData){
 
     originalCheckData.successCodes = typeof(originalCheckData.successCodes) == 'object' && originalCheckData.successCodes instanceof Array && originalCheckData.successCodes.length > 0 ? originalCheckData.successCodes : false;
 
-    originalCheckData.timeOutSeconds = typeof(originalCheckData.successCodes) == 'number' && originalCheckData.timeOutSeconds % 1 === 0 && originalCheckData.timeOutSeconds >= 1 && originalCheckData.timeOutSeconds <= 5 ? originalCheckData.timeOutSeconds : false;
+    originalCheckData.timeOutSeconds = typeof(originalCheckData.timeOutSeconds) == 'number' && originalCheckData.timeOutSeconds % 1 === 0 && originalCheckData.timeOutSeconds >= 1 && originalCheckData.timeOutSeconds <= 5 ? originalCheckData.timeOutSeconds : false;
 
     //Set the keys that may not be set if the workers have never seen this check before
     originalCheckData.state =  typeof(originalCheckData.state) == 'string' && ['up','down'].indexOf(originalCheckData.state) > -1 ? originalCheckData.state : 'down';
 
     originalCheckData.lastChecked = typeof(originalCheckData.lastChecked) == 'number' && originalCheckData.lastChecked > 0 ? originalCheckData.lastChecked : false;
 
-    console.log(originalCheckData);
-    console.log(originalCheckData.id);
-    console.log(originalCheckData.userPhone);
-    console.log(originalCheckData.protocol);
-    console.log(originalCheckData.url);
-    console.log(originalCheckData.method);
-    console.log(originalCheckData.successCodes);
-    console.log(originalCheckData.timeOutSeconds);
     //if all the checks passed, then pass the data along to the next step in the process
     if(originalCheckData.id && 
         originalCheckData.userPhone &&
@@ -82,12 +74,11 @@ workers.validateCheckData = function(originalCheckData){
 
 //Perform the check, send the originalCheckData and the outcome of the check process to the next step in the process
 workers.performCheck = function(originalCheckData){
-    
     //Prepare the initial outcome
     let checkOutcome = {
         'error' : false,
         'responseCode' : false,
-    };
+    };  
     //Mark that the outcome has not been sent yet
     let outcomeSent = false;
     //Parse the hostname and the path out of the original check data
@@ -111,7 +102,7 @@ workers.performCheck = function(originalCheckData){
         //Update the check outcome and pass the data along
         checkOutcome.responseCode = status;
         if(!outcomeSent){
-            workers.processCheckOutcome(originalCheckData.checkOutcome);
+            workers.processCheckOutcome(originalCheckData,checkOutcome);
             outcomeSent = true;
         }
     });
@@ -139,15 +130,16 @@ workers.performCheck = function(originalCheckData){
             outcomeSent = true;
         };
     });
-
     //End the request
     req.end();
 };
 
 //Process the check outcome and update the checkdata as needed and then trigger an alert to the user if needed. Special logic for accomodating a check that has been never tested before (do not alert on that one)
 workers.processCheckOutcome = function(originalCheckData,checkOutcome){
+    /* console.log(originalCheckData);
+    console.log(checkOutcome); */
     //Decide if the check is considered up or down
-    let state = checkOutcome.error && checkOutcome.responseCode && originalCheckData.successCodes.indexOf(checkOutcome.responseCode > -1 ? 'up' : 'down');
+    let state = !checkOutcome.error && checkOutcome.responseCode && originalCheckData.successCodes.indexOf(checkOutcome.responseCode) > -1 ? 'up' : 'down'; 
     //Decide if an alert is warranted
     let alertWarranted = originalCheckData.lastChecked && originalCheckData.state !== state ? true : false;
     //Update the check data
