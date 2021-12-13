@@ -68,6 +68,9 @@ server.unifiedServer = function(req, res){
     //Choose the handler this request should go to. if not found, use the 'not found' handler provided
     let chosenHandler = typeof(server.router[trimmedPath]) !== 'undefined' ? server.router[trimmedPath] : handlers.notFound;
 
+    //if the request is within the public directory, use the publid handler instead
+    chosenHandler = trimmedPath.indexOf('public/') > -1 ? handlers.public : chosenHandler;
+
     //Construct the data object (JSON) to send it to the handler
     let data = {
         'trimmedPath' : trimmedPath,
@@ -78,18 +81,48 @@ server.unifiedServer = function(req, res){
     };
 
     //Route the request to the handler specified in the handler
-    chosenHandler(data, function(statusCode, payload){
+    chosenHandler(data, function(statusCode, payload, contentType){
+
+            //Determine the type of response (fallback to JSON)
+            contentType = typeof(contentType) == 'string' && contentType ? contentType : 'json';
+
             //Use the satus code called back by the handler or default (200)
             statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
 
-            //Use the payload called back by the handler or default to an empty object
-            payload = typeof(payload) == 'object' ? payload : {};
+            //Return the response parts that are content-specific
+            let payloadString = '';
+            if(contentType == 'json'){
+                res.setHeader('Content-Type','application/json');
+                //Convert the payload to a string. This is the payload the handler is sending back to the user
+                payload = typeof(payload) == 'object' ? payload : {};
+                payloadString = JSON.stringify(payload);
+            };
+            if(contentType == 'html'){
+                res.setHeader('Content-Type','text/html');
+                payloadString = typeof(payload) == 'string' ? payload : '';
+            };
+            if(contentType == 'favicon'){
+                res.setHeader('Content-Type','image/x-icon');
+                payloadString = typeof(payload) !== 'undefined' ? payload : '';
+            };
+            if(contentType == 'css'){
+                res.setHeader('Content-Type','text/css');
+                payloadString = typeof(payload) !== 'undefined' ? payload : '';
+            };
+            if(contentType == 'png'){
+                res.setHeader('Content-Type','image/png');
+                payloadString = typeof(payload) !== 'undefined' ? payload : '';
+            };
+            if(contentType == 'jpg'){
+                res.setHeader('Content-Type','image/jpeg');
+                payloadString = typeof(payload) !== 'undefined' ? payload : '';
+            };
+            if(contentType == 'plain'){
+                res.setHeader('Content-Type','text/plain');
+                payloadString = typeof(payload) !== 'undefined' ? payload : '';
+            };
 
-            //Convert the payload to a string. This is the payload the handler is sending back to the user
-            let payloadString = JSON.stringify(payload);
-
-            //Return the response
-            res.setHeader('Content-Type','application/json'); //We are sending JSON. This lets know every one out there wI am sending JSON format.
+            //Return the response-parts that are common to all content-types
             res.writeHead(statusCode);
             res.end(payloadString);
 
@@ -107,10 +140,21 @@ server.unifiedServer = function(req, res){
 
 //Define a request router
 server.router = {
+    '' : handlers.index,
+    'account/create': handlers.accountCreate,
+    'account/edit': handlers.accountEditt,
+    'account/deleted': handlers.accountDeleted,
+    'session/create' : handlers.sessionCreate,
+    'session/deleted' : handlers.sessionDeleted,
+    'checks/all' : handlers.checkList,
+    'checks/create' : handlers.checksCreate,
+    'checks/edit' : handlers.checksEdit,
     'ping' : handlers.ping,
-    'users': handlers.users,
-    'tokens': handlers.tokens,
-    'checks': handlers.checks
+    'api/users': handlers.users,
+    'api/tokens': handlers.tokens,
+    'api/checks': handlers.checks,
+    'favicon.ico' : handlers.favicon,
+    'public' : handlers.public
 };
 
 //Init script
