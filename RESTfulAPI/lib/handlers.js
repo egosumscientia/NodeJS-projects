@@ -15,12 +15,10 @@ let handlers = {};
 handlers.index = function(data, callback){
     //Reject any request that isn't a GET
     if(data.method == 'get'){
-
         //Prepare for interpolation
         let templateData = {
-            'head.title' : 'This is the title',
-            'head.description' : 'This is the meta description',
-            'body.title' : 'Hello templated world',
+            'head.title' : 'Uptime monitoring - Made Simple',
+            'head.description' : 'We offer simple uptime monitoring for HTTP/HTTPS sites of all kinds. When your site gets down, we\'ll send you a text to let you know',
             'body.class' : 'index'
         };
 
@@ -42,7 +40,39 @@ handlers.index = function(data, callback){
         });
     }else{
         callback(405,undefined,'html');
-    }
+    };
+};
+
+//Create account
+handlers.accountCreate = function(data,callback){
+    //Reject any request that isn't a GET
+    if(data.method == 'get'){
+        //Prepare for interpolation
+        let templateData = {
+            'head.title' : 'Create an account',
+            'head.description' : 'Signup is easy and only takes a few seconds',
+            'body.class' : 'accountCreate'
+        };
+
+        //Read in a template as a string
+        helpers.getTemplate('accountCreate',templateData,function(err,str){
+            if(!err && str){
+                //Add the universal header and footer
+                helpers.addUniversalTemplates(str,templateData,function(err,str){
+                    if(!err && str){
+                        //Return taht page as HTML
+                        callback(200,str,'html');
+                    }else{
+                        callback(500,undefined,'html');
+                    };
+                });
+            }else{
+                callback(500,undefined,'html');
+            };
+        });
+    }else{
+        callback(405,undefined,'html');
+    };
 };
 
 //Favicon handler
